@@ -3,8 +3,10 @@ import DialogueEditor from "@/components/DialogueEditor.vue";
 import {ref} from "vue";
 import IconClipboard from "@/components/icons/IconClipboard.vue";
 import ClickQuestEditor from "@/components/ClickQuestEditor.vue";
+import NavBarButton from "@/components/NavBarButton.vue";
 
 const clipboardText = ref("");
+const editor = ref(0);
 function setClipboardText(value: string) {
   clipboardText.value = value;
 }
@@ -13,9 +15,7 @@ function copyToClipboard() {
   navigator.clipboard.writeText(clipboardText.value);
 }
 
-function pathRoute(pathname: string) {
-  return window.location.pathname === pathname;
-}
+const setEditor = (value: number) => editor.value = value;
 
 </script>
 
@@ -24,18 +24,14 @@ function pathRoute(pathname: string) {
     <header>
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">MSPFA Editor's tools</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <a class="navbar-brand" href="#" @click="e => {
+            editor = 0;
+            e.preventDefault();
+          }">MSPFA Editor's tools</a>
+          <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a :class="'nav-link' + (pathRoute('/dialogue') ? ' active' : '')" aria-current="page" href="/dialogue">Dialogue</a>
-              </li>
-              <li class="nav-item">
-                <a :class="'nav-link' + (pathRoute('/clickquest') ? ' active' : '')" href="/clickquest">Click quest</a>
-              </li>
+              <nav-bar-button :editor :set-editor text="Dialogue" :editor-index="1"/>
+              <nav-bar-button :editor :set-editor text="Click quest" :editor-index="2"/>
             </ul>
           </div>
         </div>
@@ -43,8 +39,8 @@ function pathRoute(pathname: string) {
     </header>
     <main>
       <div id="editors" class="p-2">
-        <dialogue-editor v-if="pathRoute('/dialogue')" :set-clipboard-text/>
-        <click-quest-editor v-else-if="pathRoute('/clickquest')" :set-clipboard-text/>
+        <dialogue-editor v-if="editor == 1" :set-clipboard-text/>
+        <click-quest-editor v-else-if="editor == 2" :set-clipboard-text/>
         <div v-else id="welcome-page">
           <h3>MSPFA Editor's Tools</h3>
           <p>MSPFA Editor's Tools is a website with some useful tools for people
