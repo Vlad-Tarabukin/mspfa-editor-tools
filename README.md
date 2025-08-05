@@ -1,4 +1,4 @@
-# Project Title
+# MSPFA Editor's tools
 
 MSPFA Editor's Tools is a website with some useful tools for people who write stories on MSPaint Fan Adventures.
 
